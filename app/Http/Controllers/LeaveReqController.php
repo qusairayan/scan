@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 
+use Carbon\Carbon;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
@@ -23,10 +24,19 @@ class leaveReqController extends Controller
         ]);
 
         $user_id = $request->input('user_id');
-        $period = $request->input('period');
+        $period = floatval($request->input('period'));
         $reason = $request->input('reason');
         $date = $request->input('date');
         $time = $request->input('time');
+
+
+
+
+        $hours = floor($period);
+        $minutes = ($period - $hours) * 60;
+    
+        $period = Carbon::createFromTime($hours, $minutes)->format('H:i');
+
 
 
         if ($validator->fails()) {

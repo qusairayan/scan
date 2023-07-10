@@ -63,21 +63,14 @@ class VacationReqController extends Controller
 
                 if ($success) {
 
-                    $ss='';
 
                     if ($request->hasFile('image')) {
                         $image = $request->file('image');
 
-                        // Generate a unique filename
                         $filename = $vacationReq->id . '.' . $image->getClientOriginalExtension();
 
-                        // Store the image file
                         $path = $image->storeAs('leaves', $filename);
-
-                        // $path will contain the path where the image file is stored
-
-                       
-
+              
                         
                     }
 
