@@ -3,13 +3,16 @@
 namespace App\Http\Controllers;
 
 
-use Carbon\Carbon;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use App\Models\User;
 use App\Models\leaveReq;
+
+use Carbon\Carbon;
+
+
 
 
 class leaveReqController extends Controller
@@ -24,7 +27,7 @@ class leaveReqController extends Controller
         ]);
 
         $user_id = $request->input('user_id');
-        $period = floatval($request->input('period'));
+        $period = $request->input('period');
         $reason = $request->input('reason');
         $date = $request->input('date');
         $time = $request->input('time');

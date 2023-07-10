@@ -17,8 +17,8 @@ class GetLeaveController extends Controller
             $currentDateTime = Carbon::now();
 
             $lastLeave = LeaveReq::where('user_id', $user_id)->where('date', '>', $currentDateTime)
-            ->where('time', '>', $currentDateTime->format('H:i:s'))->latest()->first();
- 
+                ->where('time', '>', $currentDateTime->format('H:i:s'))->latest()->first();
+
 
 
 
@@ -42,13 +42,21 @@ class GetLeaveController extends Controller
 
             $allLeaves = LeaveReq::where('user_id', $user_id)->orderBy('id', 'desc')->get();
 
-            $allLeaves->toArray();
-
-            json_encode($allLeaves);
+            $allLeavesArray = $allLeaves->toArray(); // Assign the result to a variable
+            
+            foreach ($allLeavesArray as &$leave) {
+                $carbon = Carbon::createFromFormat('H:i:s', $leave['period']);
+                
+                if ($carbon !== false) {
+                    $formattedTime = $carbon->format('H:i');
+                    $leave['period'] = $formattedTime;
+                }
+            }
+            
 
             return response()->json([
                 'success' => true,
-                'Leaves' => $allLeaves,
+                'Leaves' => $allLeavesArray,
             ], 200);
         } else {
             return response()->json([
