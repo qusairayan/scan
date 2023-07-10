@@ -11,10 +11,10 @@ class GetVacationController extends Controller
     public function getVacations(Request $request){
 
 
-        if (request()->has('id')) {
+        if (request()->has('user_id')) {
 
-            $id=request()->input('id');
-            $Vacation = VacationReq::find($id);
+            $user_id=request()->input('user_id');
+            $Vacation = VacationReq::where('user_id',$user_id);
 
 
 
@@ -37,19 +37,13 @@ class GetVacationController extends Controller
 
 
         }
-        else{
+        else {
 
 
-        $allVacations = VacationReq::all();
-
-        $allVacations->toArray();
-
-        json_encode($allVacations);
 
         return response()->json([
-            'success' => true,
-            'vacations' => $allVacations,
-            'image'=>'Ashrf Taj Rask Wala',
+            'success' => false,
+            'message' => 'No User data Sent',
         ], 200);
 
         }
