@@ -3,6 +3,7 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
+use Illuminate\Support\Facades\DB;
 
 return new class extends Migration
 {
@@ -20,14 +21,18 @@ return new class extends Migration
 
 
 
-
+            $table->unsignedBigInteger('department_id');
             $table->unsignedBigInteger('company_id');
+
             $table->string('otp')->nullable();
      
 
             $table->integer('status');
             $table->string('token');
             $table->integer('role');
+
+            $table->date('started_at')->default(DB::raw('CURRENT_DATE'));;
+
         
            
 
@@ -35,6 +40,7 @@ return new class extends Migration
 
           
             $table->foreign('company_id')->references('id')->on('company')->onDelete('cascade');
+            $table->foreign('department_id')->references('id')->on('department')->onDelete('cascade');
             
         });
     }

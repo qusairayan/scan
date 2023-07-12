@@ -19,8 +19,8 @@ class leaveReqController extends Controller
 {
     public function leaveReq(Request $request){
         $validator = Validator::make($request->all(), [
-            'user_id' => 'required',
-            'period' => 'required',
+            'user_id' => 'required|integer',
+            'period' => 'required|date_format:H:i',
             'reason' => 'required',
             'date' => 'required',
             'time' => 'required',
@@ -35,10 +35,7 @@ class leaveReqController extends Controller
 
 
 
-        $hours = floor($period);
-        $minutes = ($period - $hours) * 60;
-    
-        $period = Carbon::createFromTime($hours, $minutes)->format('H:i');
+
 
 
 

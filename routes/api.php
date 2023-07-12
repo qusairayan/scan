@@ -9,6 +9,7 @@ use App\Http\Controllers\LeaveReqController;
 use App\Http\Controllers\VacationReqController;
 use App\Http\Controllers\GetVacationController;
 use App\Http\Controllers\GetLeaveController;
+use App\Http\Controllers\ProfileController;
 
 
 
@@ -27,6 +28,13 @@ Route::middleware('csrf')->group(function () {
    
 });
 
+Route::middleware(['api'])->group(function () {
+Route::post('/profile', [ProfileController::class, 'profile']);
+    
+});
+
+
+
 Route::post('/login', [AuthController::class, 'login']);
 Route::post('/otp', [otpController::class, 'sendOtp']);
 Route::post('/verifyOtp', [otpController::class, 'verifyOtp']);
@@ -40,4 +48,8 @@ Route::post('/vacationReq', [VacationReqController::class, 'vacationReq']);
 
 Route::post('/getVacation', [GetVacationController::class, 'getVacations']);
 Route::post('/getLeave', [GetLeaveController::class, 'getLeaves']);
+
+Route::post('/profile', [ProfileController::class, 'profile']);
+
+
 

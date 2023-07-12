@@ -9,6 +9,8 @@ use Illuminate\Support\Facades\Validator;
 use App\Models\User;
 use App\Models\VacationReq;
 use Illuminate\Support\Facades\Storage;
+use Carbon\Carbon;
+
 
 
 class VacationReqController extends Controller
@@ -17,8 +19,8 @@ class VacationReqController extends Controller
     {
 
         $validator = Validator::make($request->all(), [
-            'user_id' => 'required',
-            'period' => 'required',
+            'user_id' => 'required|integer',
+            'period' => 'required|integer',
             'type' => 'required',
             'date' => 'required',
 
@@ -51,12 +53,16 @@ class VacationReqController extends Controller
             if ($user) {
 
 
+
+
                 $vacationReq = new VacationReq();
                 $vacationReq->user_id = $user_id;
                 $vacationReq->period = $period;
                 $vacationReq->type = $type;
                 $vacationReq->date = $date;
                 $success = $vacationReq->save();
+
+
 
 
 
@@ -104,7 +110,7 @@ class VacationReqController extends Controller
         } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $exception) {
             return response()->json([
                 'success' => false,
-                'message' => 'User does not  exist .',
+                'message' => 'Error, User does not  exist .',
 
             ], 400);
         }
