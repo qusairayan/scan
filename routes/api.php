@@ -49,7 +49,15 @@ Route::post('/vacationReq', [VacationReqController::class, 'vacationReq']);
 Route::post('/getVacation', [GetVacationController::class, 'getVacations']);
 Route::post('/getLeave', [GetLeaveController::class, 'getLeaves']);
 
-Route::post('/profile', [ProfileController::class, 'profile']);
+Route::post('/getProfile', [ProfileController::class, 'getProfile']);
+Route::post('/profileOTP', [ProfileController::class, 'profileOTP']);
+Route::post('/profilePassword', [ProfileController::class, 'profilePassword']);
+Route::post('/updateProfile', [ProfileController::class, 'updateProfile']);
+
+
+
+
+
 
 
 

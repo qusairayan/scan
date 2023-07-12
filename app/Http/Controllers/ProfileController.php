@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Validator;
 use App\Models\User;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Session;
+use Spatie\FlareClient\Http\Exceptions\InvalidData;
 
 class ProfileController extends Controller
 {
@@ -16,9 +17,9 @@ class ProfileController extends Controller
         $this->middleware('api');
     }
 
-    public function profile(Request $request)
+    public function updateProfile(Request $request)
     {
-        if (request()->has('id') && request()->has('update')) {
+        if (request()->has('id')) {
             $id = request()->input('id');
             $validator = Validator::make($request->all(), [
                 'name' => 'required|string',
@@ -34,42 +35,52 @@ class ProfileController extends Controller
 
             $user = User::where('id', $id)->first();
 
-            try {
-                $name = $request->input('name');
-                $email = $request->input('email');
+            $name = $request->input('name');
+            $email = $request->input('email');
 
-                if ($email != $user->email) {
-                    $otp = rand(100000, 999999);
-                    
-                    Mail::raw("Your OTP is: $otp", function ($message) use ($email) {
-                        $message->to($email)
-                            ->subject('One-Time Password (OTP)');
-                    });
+            if ($email != $user->email) {
+                $otp = rand(100000, 999999);
 
-                    $user->name = $name;
-                    $user->save();
+                Mail::raw("Your OTP is: $otp", function ($message) use ($email) {
+                    $message->to($email)
+                        ->subject('One-Time Password (OTP)');
+                });
 
-                    // Move the Session::put() statement here
-                    Session::put('verify_email_' . strval($id), $email);
-                    $user ->otp=$otp;
-                    $user ->save();
-                    return response()->json([
-                        'success' => true,
-                        'message' => 'OTP sent successfully, Name updated successfully ',
-                    ], 200);
-                } else {
-                    $user->name = $name;
-                    $user->save();
+                $user->name = $name;
+                $user->save();
 
-                    return response()->json([
-                        'success' => true,
-                        'message' => 'Profile updated successfully.',
-                    ], 200);
-                }
-            } catch (\Throwable $th) {
-                //throw $th;
+                // Move the Session::put() statement here
+                Session::put('verify_email_' . strval($id), $email);
+                $user->otp = $otp;
+                $user->save();
+                return response()->json([
+                    'success' => true,
+                    'message' => 'OTP sent successfully, Name updated successfully ',
+                ], 200);
+            } else {
+
+                $user->name = $name;
+                $user->save();
+
+                return response()->json([
+                    'success' => true,
+                    'message' => 'Profile updated successfully.',
+                ], 200);
             }
-        } else if (request()->has('id') && request()->has('otp')) {
+        } 
+        else {
+            return response()->json([
+                'success' => false,
+                'message' => 'Error: No user provided'
+            ], 201);
+        }
+    }
+        
+        
+public function profileOTP(Request $request){ 
+        
+        
+        if (request()->has('id') && request()->has('otp')) {
             $id = request()->input('id');
             $otp = request()->input('otp');
             $user = User::where('id', $id)->first();
@@ -84,11 +95,57 @@ class ProfileController extends Controller
                 ], 200);
             } else {
                 return response()->json([
-                    'success' =>false,
+                    'success' => false,
                     'message' => 'Invalid OTP.',
                 ], 201);
             }
-        } else if (request()->has('id')) {
+        }
+        else {
+            return response()->json([
+                'success' => false,
+                'message' => 'Error: No user provided'
+            ], 201);
+        }
+        
+    }
+    
+    public function profilePassword(Request $request){
+
+    if (request()->has('id') && request()->has('password') && request()->has('newPassword')) {
+
+            $validator = Validator::make($request->all(), [
+                'id' => 'required',
+                'password' => 'required|string',
+                'newPassword' => 'required|min:8',
+            ]);
+
+            if ($validator->fails()) {
+                return response()->json([
+                    'success' => false,
+                    'messages' => 'Invalid data'
+                ]);
+            }
+            $id = request()->input('id');
+
+            $user = User::where('id', $id)->first();
+
+            $password = request()->input('password');
+            $newPassword = request()->input('newPassword');
+            if ($user->password == $password) {
+                $user->password = $newPassword;
+                $user->save();
+            }
+
+        }
+        else {
+            return response()->json([
+                'success' => false,
+                'message' => 'Error: No data provided'
+            ], 201);
+        }
+    }
+    public function getProfile(Request $request){
+    if (request()->has('id')) {
             $id = request()->input('id');
 
             $user = User::where('id', $id)->first();
