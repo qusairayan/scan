@@ -24,6 +24,8 @@ return new class extends Migration
             $table->unsignedBigInteger('department_id');
             $table->unsignedBigInteger('company_id');
 
+            $table->string('image')->nullable();
+
             $table->string('otp')->nullable();
      
 

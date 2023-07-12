@@ -17,8 +17,7 @@ class ProfileController extends Controller
         $this->middleware('api');
     }
 
-    public function updateProfile(Request $request)
-    {
+    public function updateProfile(Request $request){
         if (request()->has('id')) {
             $id = request()->input('id');
             $validator = Validator::make($request->all(), [
@@ -45,19 +44,47 @@ class ProfileController extends Controller
                     $message->to($email)
                         ->subject('One-Time Password (OTP)');
                 });
+                if (request()->has('image')) {
+            
+                    $image = $request->file('image');
 
+                    $filename = $user->id . '.' . $image->getClientOriginalExtension();
+
+                    $path = $image->storeAs('profile', $filename);
+                    if ($path) {
+$user ->image= $id . '.' . $image->getClientOriginalExtension();
+                    }
+                }
                 $user->name = $name;
                 $user->save();
 
-                // Move the Session::put() statement here
                 Session::put('verify_email_' . strval($id), $email);
                 $user->otp = $otp;
                 $user->save();
                 return response()->json([
                     'success' => true,
-                    'message' => 'OTP sent successfully, Name updated successfully ',
-                ], 200);
+                    'otpSent' => true,
+                    'message' => 'OTP sent successfully to verify Email, Profile updated successfully ',
+            ], 200);
             } else {
+
+
+                if (request()->has('image')) {
+                 
+                    $image = $request->file('image');
+
+                    $filename = $user->id . '.' . $image->getClientOriginalExtension();
+
+                    $path = $image->storeAs('profile', $filename);
+$user ->image= $id . '.' . $image->getClientOriginalExtension();
+$user->save();
+   return response()->json([
+                        'success' => $path,
+                        'message' => 'OTP sxddssent successfully, Name updated successfully ',
+                    ], 200);
+                    
+                }
+
 
                 $user->name = $name;
                 $user->save();
@@ -67,19 +94,19 @@ class ProfileController extends Controller
                     'message' => 'Profile updated successfully.',
                 ], 200);
             }
-        } 
-        else {
+        } else {
             return response()->json([
                 'success' => false,
                 'message' => 'Error: No user provided'
             ], 201);
         }
     }
-        
-        
-public function profileOTP(Request $request){ 
-        
-        
+
+
+    public function profileOTP(Request $request)
+    {
+
+
         if (request()->has('id') && request()->has('otp')) {
             $id = request()->input('id');
             $otp = request()->input('otp');
@@ -99,19 +126,18 @@ public function profileOTP(Request $request){
                     'message' => 'Invalid OTP.',
                 ], 201);
             }
-        }
-        else {
+        } else {
             return response()->json([
                 'success' => false,
                 'message' => 'Error: No user provided'
             ], 201);
         }
-        
     }
-    
-    public function profilePassword(Request $request){
 
-    if (request()->has('id') && request()->has('password') && request()->has('newPassword')) {
+    public function profilePassword(Request $request)
+    {
+
+        if (request()->has('id') && request()->has('password') && request()->has('newPassword')) {
 
             $validator = Validator::make($request->all(), [
                 'id' => 'required',
@@ -135,17 +161,16 @@ public function profileOTP(Request $request){
                 $user->password = $newPassword;
                 $user->save();
             }
-
-        }
-        else {
+        } else {
             return response()->json([
                 'success' => false,
                 'message' => 'Error: No data provided'
             ], 201);
         }
     }
-    public function getProfile(Request $request){
-    if (request()->has('id')) {
+    public function getProfile(Request $request)
+    {
+        if (request()->has('id')) {
             $id = request()->input('id');
 
             $user = User::where('id', $id)->first();
