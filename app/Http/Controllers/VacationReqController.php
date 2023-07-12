@@ -77,7 +77,7 @@ class VacationReqController extends Controller
                         $filename = $vacationReq->id . '.' . $image->getClientOriginalExtension();
 
                         // Store the image file
-                        $path = $image->storeAs('leaves', $filename);
+                        $path = $image->storeAs('public/vacation', $filename);
 
                         // $path will contain the path where the image file is stored
 

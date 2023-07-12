@@ -9,6 +9,8 @@ use App\Models\User;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Session;
 use Spatie\FlareClient\Http\Exceptions\InvalidData;
+use Illuminate\Support\Facades\Storage;
+
 
 class ProfileController extends Controller
 {
@@ -17,9 +19,12 @@ class ProfileController extends Controller
         $this->middleware('api');
     }
 
-    public function updateProfile(Request $request){
+    public function updateProfile(Request $request)
+    {
         if (request()->has('id')) {
             $id = request()->input('id');
+
+
             $validator = Validator::make($request->all(), [
                 'name' => 'required|string',
                 'email' => 'required',
@@ -45,14 +50,22 @@ class ProfileController extends Controller
                         ->subject('One-Time Password (OTP)');
                 });
                 if (request()->has('image')) {
-            
+
+
+                    $prevImg = $user->image;
+                    if ($prevImg != '') {
+                        Storage::delete('public/profile/' . $prevImg);
+                    }
+
+
+
                     $image = $request->file('image');
 
                     $filename = $user->id . '.' . $image->getClientOriginalExtension();
 
-                    $path = $image->storeAs('profile', $filename);
+                    $path = $image->storeAs('public/profile', $filename);
                     if ($path) {
-$user ->image= $id . '.' . $image->getClientOriginalExtension();
+                        $user->image = $id . '.' . $image->getClientOriginalExtension();
                     }
                 }
                 $user->name = $name;
@@ -65,24 +78,31 @@ $user ->image= $id . '.' . $image->getClientOriginalExtension();
                     'success' => true,
                     'otpSent' => true,
                     'message' => 'OTP sent successfully to verify Email, Profile updated successfully ',
-            ], 200);
+                ], 200);
             } else {
 
 
                 if (request()->has('image')) {
-                 
+
+
+
+                    $prevImg = $user->image;
+                    if ($prevImg != '') {
+                        Storage::delete('public/profile/' . $prevImg);
+                    }
+
+
                     $image = $request->file('image');
 
                     $filename = $user->id . '.' . $image->getClientOriginalExtension();
 
-                    $path = $image->storeAs('profile', $filename);
-$user ->image= $id . '.' . $image->getClientOriginalExtension();
-$user->save();
-   return response()->json([
-                        'success' => $path,
-                        'message' => 'OTP sxddssent successfully, Name updated successfully ',
+                    $path = $image->storeAs('public/profile', $filename);
+                    $user->image = $id . '.' . $image->getClientOriginalExtension();
+                    $user->save();
+                    return response()->json([
+                        'success' => true,
+                        'message' => 'Profile updated successfully ',
                     ], 200);
-                    
                 }
 
 
@@ -177,7 +197,7 @@ $user->save();
             if ($user) {
                 return response()->json([
                     'success' => true,
-                    'data' => $user
+                    'data' => $user,
                 ], 200);
             } else {
                 return response()->json([
