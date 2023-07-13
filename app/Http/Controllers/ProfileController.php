@@ -98,6 +98,7 @@ class ProfileController extends Controller
 
                     $path = $image->storeAs('public/profile', $filename);
                     $user->image = $id . '.' . $image->getClientOriginalExtension();
+                    $user->name = $name;
                     $user->save();
                     return response()->json([
                         'success' => true,
@@ -106,11 +107,10 @@ class ProfileController extends Controller
                 }
 
 
-                $user->name = $name;
-                $user->save();
+               
 
                 return response()->json([
-                    'success' => true,
+                    'success' => $name,
                     'message' => 'Profile updated successfully.',
                 ], 200);
             }
