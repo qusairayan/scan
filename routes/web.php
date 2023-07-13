@@ -23,17 +23,17 @@ Route::prefix('front')->group(function(){
     Route::get('/',[FrontController::class, 'front'])->middleware('auth');
 
 });
-Auth::routes();
+// Auth::routes();
 
-Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+// Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
-Auth::routes();
+// Auth::routes();
 
-Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+// Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
-Auth::routes();
+// Auth::routes();
 
-Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+// Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
 
-Route::get('/profileIMG/{filename}', [showProfileImageController::class, 'showProfileImage']);
+// Route::get('/profileIMG/{filename}', [showProfileImageController::class, 'showProfileImage']);

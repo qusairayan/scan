@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\api\profile;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
@@ -168,7 +168,7 @@ class ProfileController extends Controller
             if ($validator->fails()) {
                 return response()->json([
                     'success' => false,
-                    'messages' => 'Invalid data'
+                    'message' => 'Invalid data'
                 ]);
             }
             $id = request()->input('id');
@@ -182,7 +182,7 @@ class ProfileController extends Controller
                 $user->save();
                 return response()->json([
                     'success' => true,
-                    'messages' => 'Password has benn Changed'
+                    'message' => 'Password has been Changed'
                 ]);
             
             }

@@ -2,15 +2,18 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\AuthController;
-use App\Http\Controllers\otpController;
-use App\Http\Controllers\AttendanceController;
-use App\Http\Controllers\LeaveReqController;
-use App\Http\Controllers\VacationReqController;
-use App\Http\Controllers\GetVacationController;
-use App\Http\Controllers\GetLeaveController;
-use App\Http\Controllers\ProfileController;
-use App\Http\Controllers\showProfileImageController;
+
+use App\Http\Controllers\api\login\LoginController;
+use App\Http\Controllers\api\attendence\AttendanceController;
+
+use App\Http\Controllers\api\leaves\LeaveReqController;
+use App\Http\Controllers\api\leaves\GetLeaveController;
+
+use App\Http\Controllers\api\vacations\VacationReqController;
+use App\Http\Controllers\api\vacations\GetVacationController;
+
+use App\Http\Controllers\api\profile\ProfileController;
+use App\Http\Controllers\api\profile\showProfileImageController;
 
 
 
@@ -36,9 +39,9 @@ Route::post('/profile', [ProfileController::class, 'profile']);
 
 
 
-Route::post('/login', [AuthController::class, 'login']);
-Route::post('/otp', [otpController::class, 'sendOtp']);
-Route::post('/verifyOtp', [otpController::class, 'verifyOtp']);
+Route::post('/login', [LoginController::class, 'login']);
+Route::post('/ActivateOtp', [LoginController::class, 'sendOtp']);
+Route::post('/ActivateVerifyOtp', [LoginController::class, 'verifyOtp']);
 
 Route::post('/attendence', [AttendanceController::class, 'attendence']);
 
