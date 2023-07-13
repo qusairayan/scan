@@ -180,6 +180,11 @@ class ProfileController extends Controller
             if ($user->password == $password) {
                 $user->password = $newPassword;
                 $user->save();
+                return response()->json([
+                    'success' => true,
+                    'messages' => 'Password has benn Changed'
+                ]);
+            
             }
         } else {
             return response()->json([
@@ -195,11 +200,16 @@ class ProfileController extends Controller
 
             $user = User::where('id', $id)->first();
             if ($user) {
+
+                $image= request()->getHttpHost().'/profileIMG/'.$user->image;
                 return response()->json([
+                    'image' =>  $image,
                     'success' => true,
                     'data' => $user,
                 ], 200);
             } else {
+
+                
                 return response()->json([
                     'success' => false,
                     'message' => 'User not found'

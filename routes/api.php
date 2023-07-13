@@ -10,6 +10,7 @@ use App\Http\Controllers\VacationReqController;
 use App\Http\Controllers\GetVacationController;
 use App\Http\Controllers\GetLeaveController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\showProfileImageController;
 
 
 
@@ -53,6 +54,8 @@ Route::post('/getProfile', [ProfileController::class, 'getProfile']);
 Route::post('/profileOTP', [ProfileController::class, 'profileOTP']);
 Route::post('/profilePassword', [ProfileController::class, 'profilePassword']);
 Route::post('/updateProfile', [ProfileController::class, 'updateProfile']);
+
+Route::post('/profileIMG/{filename}', [showProfileImageController::class, 'showProfileImage']);
 
 
 

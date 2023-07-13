@@ -4,6 +4,7 @@ use App\Http\Controllers\front\FrontController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\QusaiController;
+use App\Http\Controllers\showProfileImageController;
 
 
 
@@ -33,3 +34,6 @@ Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name
 Auth::routes();
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+
+
+Route::get('/profileIMG/{filename}', [showProfileImageController::class, 'showProfileImage']);
